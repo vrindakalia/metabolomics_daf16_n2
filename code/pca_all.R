@@ -79,3 +79,4 @@ feature.transpose <- function(featuretable){
         mutate_if(is.factor, ~ as.numeric(as.character(.x))) %>% 
         as_tibble()
 }
+
