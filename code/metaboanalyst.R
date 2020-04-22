@@ -1,13 +1,17 @@
 #######
 # Creating file for metaboanalyst
 #######
+library(tidyverse)
+library(janitor)
 
 # Things to do:
 # Subtract m9 features
+# impute missing values with min/2
 # call in transposed feature table
 # See function at the end!
 
 feat.labeled <- read_tsv("results/features_labels_transposed.txt")
+feat.labeled[1:5,1:5]
 
 # Get average intensity of each feature in the M9 samples
 m9.avg <- feat.labeled %>% 
@@ -15,12 +19,16 @@ m9.avg <- feat.labeled %>%
     select(contains("_")) %>% 
     map_dbl(mean)
 
+m9.avg[1:5]
+
 # select N2 and daf16 samples
 feat.comp <- feat.labeled %>% 
     filter(strain %in% c("daf16", "N2")) %>% 
     select(contains("_")) %>% 
     t(.) %>% 
     as.data.frame() 
+
+feat.comp[1:5,1:5]
 
 # Save the filenames
 daf.n2.names <- filter(feat.labeled, strain %in% c("daf16", "N2"))$File.Name
@@ -77,7 +85,6 @@ feat.metaboanlayst <- feat.imputed %>%
 
 ################
 # LOAD THIS FUNCTION
-
 # Impute missing values with min/2
 # Call in function
 min_set <- function(vec, .p) {
