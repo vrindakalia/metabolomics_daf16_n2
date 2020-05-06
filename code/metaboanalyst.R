@@ -83,14 +83,23 @@ feat.metaboanlayst <- feat.imputed %>%
     as.data.frame() %>% 
     row_to_names(1)
 
+head(feat.metaboanlayst)
+
+feat.metaboanlayst %>% 
+    write_tsv("results/n2_daf16_metaboanalyst.txt")
+
+feat.metaboanlayst %>% 
+    rownames_to_column(var = "feature") %>% 
+    write_tsv("results/n2_daf16_metaboanalyst.txt")
+
 ################
 # LOAD THIS FUNCTION
 # Impute missing values with min/2
 # Call in function
 min_set <- function(vec, .p) {
-    modify_if(vec, .p , ~ min(vec[vec>0], na.rm = T)/2) %>% 
-        reduce(c)
+    modify_if(vec, .p , ~ min(vec[vec>0], na.rm = T)/2) 
 }
+
 impute_half_min_if <- function(tbl, .p, .pp) {
     modify_if(tbl, .p, ~ min_set(.x, .pp))
 } 
